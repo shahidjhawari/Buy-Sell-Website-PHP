@@ -7,7 +7,7 @@
     <!-- Favicon-->
     <link rel="shortcut icon" href="img/fav.png">
     <!-- Author Meta -->
-    <meta name="author" content="CodePixar">
+    <meta name="author" content="">
     <!-- Meta Description -->
     <meta name="description" content="">
     <!-- Meta Keyword -->
@@ -15,7 +15,7 @@
     <!-- meta character set -->
     <meta charset="UTF-8">
     <!-- Site Title -->
-    <title>Karma Shop</title>
+    <title>Baraye Frokht</title>
     <!--
 		CSS
 		============================================= -->
