@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="css/ion.rangeSlider.skinFlat.css" />
     <link rel="stylesheet" href="css/magnific-popup.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/own.css">
 </head>
 <body>
 
