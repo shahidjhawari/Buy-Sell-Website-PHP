@@ -1,4 +1,15 @@
 <?php require('top.php'); ?>
+<style>
+	.login_box_area {
+		margin-top: 100px;
+	}
+
+	@media screen and (min-width: 200px) and (max-width: 576px) {
+		.login_box_area {
+			margin-top: -80px;
+		}
+	}
+</style>
 <!--================Login Box Area =================-->
 <section class="login_box_area section_gap">
 	<div class="container">
