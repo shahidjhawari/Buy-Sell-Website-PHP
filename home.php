@@ -9,12 +9,6 @@ if (!isset($_SESSION['USER_LOGIN'])) {
 }
 ?>
 
-<script>
-    window.onload = function() {
-        window.scrollTo(0, 450);
-    };
-</script>
-
 <style>
     .section-top-border {
         margin-top: 150px;
