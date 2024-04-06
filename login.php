@@ -35,12 +35,14 @@
 			<div class="col-lg-6">
 				<div class="login_form_inner">
 					<h3>Log in to enter</h3>
-					<form class="row login_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
+					<form class="row login_form" id="login-form" method="post">
 						<div class="col-md-12 form-group">
-							<input type="text" class="form-control" id="name" name="name" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+							<input type="text" class="form-control" name="login_email" id="login_email" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'">
+							<span class="field_error" id="login_email_error"></span>
 						</div>
 						<div class="col-md-12 form-group">
-							<input type="text" class="form-control" id="name" name="name" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+							<input type="text" class="form-control" name="login_password" id="login_password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+							<span class="field_error" id="login_password_error"></span>
 						</div>
 						<div class="col-md-12 form-group">
 							<div class="creat_account">
@@ -49,8 +51,11 @@
 							</div>
 						</div>
 						<div class="col-md-12 form-group">
-							<button type="submit" value="submit" class="primary-btn">Log In</button>
+							<button type="button" onclick="user_login()" class="primary-btn">Log In</button>
 							<a href="#">Forgot Password?</a>
+							<div class="form-output login_msg">
+								<p class="form-messege field_error"></p>
+							</div>
 						</div>
 					</form>
 				</div>
