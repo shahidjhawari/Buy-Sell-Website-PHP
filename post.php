@@ -7,6 +7,7 @@ if (!isset($_SESSION['USER_LOGIN'])) {
         window.location.href = 'index.php';
     </script>
 <?php
+    exit;
 }
 
 $user_id = $_SESSION['USER_ID'];
@@ -24,19 +25,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $image_name = basename($_FILES["fileToUpload"]["name"]);
     move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
 
-    // Prepare and bind the SQL statement
-    $stmt = $con->prepare("INSERT INTO admissions (user_id, full_name, father_name, cnic, phone_number, email, select_option, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("isssssss", $user_id, $full_name, $father_name, $cnic, $phone_number, $email, $select_option, $image_name);
+    $sql = "INSERT INTO admissions (user_id, full_name, father_name, cnic, phone_number, email, select_option, image_path)
+            VALUES ('$user_id', '$full_name', '$father_name', '$cnic', '$phone_number', '$email', '$select_option', '$image_name')";
 
-    if ($stmt->execute()) {
-        echo "<p class='msg-field'>Your form was sent successfully. We will contact you on your phone number.</p>";
-    } else {
-        echo "Error: " . $stmt->error;
+    if ($con->query($sql) === TRUE) { ?>
+        <script> window.location.href = "home.php"</script>
+    <?php } else {
+        echo "Error: " . $sql . "<br>" . $con->error;
     }
 
-    // Close statement
-    $stmt->close();
+    $_SESSION['form_submitted'] = true;
 }
+
+$sql = "SELECT * FROM admissions WHERE user_id = '$user_id'";
+$result = $con->query($sql);
 ?>
 
 <style>
@@ -46,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </style>
 
 <div class="container post-box">
-    <form action="home.php" method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data">
     <div class="form-group">
             <label for="fullName">Full Name:</label>
             <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter Full Name" required>
