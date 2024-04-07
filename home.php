@@ -1,72 +1,64 @@
-<?php require('top.php');
+<?php
+require('top.php');
 
-if (!isset($_SESSION['USER_LOGIN'])) { ?>
+// Check if the user is logged in
+if (!isset($_SESSION['USER_LOGIN'])) {
+    ?>
     <script>
         window.location.href = 'index.php';
     </script>
-<?php } ?> <?php
-            if (isset($_SESSION['form_submitted']) && $_SESSION['form_submitted'] === true) {
-                echo "<p class='msg-feild'>You have already submitted the form. We will contact you soon!</p>";
-                $disabled = "disabled";
-            } else {
-                $disabled = "";
-                if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                    $full_name = $con->real_escape_string($_POST['fullName']);
-                    $father_name = $con->real_escape_string($_POST['fatherName']);
-                    $cnic = $con->real_escape_string($_POST['cnic']);
-                    $phone_number = $con->real_escape_string($_POST['phoneNumber']);
-                    $email = $con->real_escape_string($_POST['email']);
-                    $select_option = $con->real_escape_string($_POST['select1']);
+    <?php
+    exit; // Stop further execution
+}
 
-                    $target_dir = PRODUCT_IMAGE_SERVER_PATH;
-                    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-                    $image_name = basename($_FILES["fileToUpload"]["name"]);
-                    move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
+// Get the user ID of the logged-in user
+$user_id = $_SESSION['USER_ID'];
 
-                    $sql = "INSERT INTO admissions (full_name, father_name, cnic, phone_number, email, select_option, image_path)
-                VALUES ('$full_name', '$father_name', '$cnic', '$phone_number', '$email', '$select_option', '$image_name')";
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Process form submission
+    // Escape and retrieve form data
+    $full_name = $con->real_escape_string($_POST['fullName']);
+    $father_name = $con->real_escape_string($_POST['fatherName']);
+    $cnic = $con->real_escape_string($_POST['cnic']);
+    $phone_number = $con->real_escape_string($_POST['phoneNumber']);
+    $email = $con->real_escape_string($_POST['email']);
+    $select_option = $con->real_escape_string($_POST['select1']);
 
-                    if ($con->query($sql) === TRUE) {
-                        echo "<p class='msg-feild'>Your form was sent successfully. We will contact you on your phone number.</p>";
-                        $_SESSION['form_submitted'] = true;
-                        $disabled = "disabled";
-                    } else {
-                        echo "Error: " . $sql . "<br>" . $con->error;
-                    }
-                }
-            }
-            ?>
+    // Handle file upload
+    $target_dir = PRODUCT_IMAGE_SERVER_PATH;
+    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+    $image_name = basename($_FILES["fileToUpload"]["name"]);
+    move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
 
+    // Insert form data into the database
+    $sql = "INSERT INTO admissions (user_id, full_name, father_name, cnic, phone_number, email, select_option, image_path)
+            VALUES ('$user_id', '$full_name', '$father_name', '$cnic', '$phone_number', '$email', '$select_option', '$image_name')";
+
+    if ($con->query($sql) === TRUE) {
+        echo "<p class='msg-feild'>Your form was sent successfully. We will contact you on your phone number.</p>";
+    } else {
+        echo "Error: " . $sql . "<br>" . $con->error;
+    }
+
+    // Mark the form submission as completed for this session
+    $_SESSION['form_submitted'] = true;
+}
+
+// Fetch and display forms submitted by the logged-in user
+$sql = "SELECT * FROM admissions WHERE user_id = '$user_id'";
+$result = $con->query($sql);
+?>
 
 <style>
-    .box {
-        margin-top: 200px;
-        margin-bottom: 40px;
-    }
-
-    .msg-feild {
-        text-align: center;
-        color: red;
-        transform: translateY(550px);
-        font-weight: bold;
-    }
-
-    @media screen and (min-width: 200px) and (max-width: 996px) {
-        .msg-feild {
-            text-align: center;
-            color: red;
-            transform: translateY(720px);
-            font-weight: bold;
-            margin-bottom: 60px;
-            margin-top: 30px;
-        }
-    }
+    /* Your CSS styles */
 </style>
 
 <div class="container box">
     <h2>Admission Form</h2>
+    <!-- Display the form -->
     <form action="#" method="post" enctype="multipart/form-data">
-        <div class="form-group">
+    <div class="form-group">
             <label for="fullName">Full Name:</label>
             <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter Full Name" required>
         </div>
@@ -98,47 +90,23 @@ if (!isset($_SESSION['USER_LOGIN'])) { ?>
             <label for="fileToUpload">Upload Image:</label>
             <input type="file" class="form-control-file" id="fileToUpload" name="fileToUpload" accept="image/*" required>
         </div>
-        <button type="submit" class="btn btn-warning mt-3 mb-5" <?php echo $disabled; ?>>Submit</button>
+        <button type="submit" class="btn btn-warning mt-3 mb-5">Submit</button>
     </form>
+
+    <?php
+    // Display previously submitted forms
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            // Display each form entry
+            // You can customize the display as per your requirement
+            echo "<p>Full Name: " . $row['full_name'] . "</p>";
+            echo "<p>Father Name: " . $row['father_name'] . "</p>";
+            // Display other form fields similarly
+        }
+    } else {
+        echo "<p>No forms submitted yet.</p>";
+    }
+    ?>
 </div>
-
-<script>
-    // Client-side validation script
-    document.getElementById('fullName').addEventListener('input', function() {
-        if (this.value.length > 30) {
-            this.setCustomValidity('Name cannot exceed 30 characters');
-        } else {
-            this.setCustomValidity('');
-        }
-    });
-
-    document.getElementById('fatherName').addEventListener('input', function() {
-        if (this.value.length > 30) {
-            this.setCustomValidity('Father Name cannot exceed 30 characters');
-        } else {
-            this.setCustomValidity('');
-        }
-    });
-
-    document.getElementById('cnic').addEventListener('input', function() {
-        // Remove non-numeric characters
-        this.value = this.value.replace(/\D/g, '');
-        if (this.value.length !== 13) {
-            this.setCustomValidity('CNIC must be 13 numeric characters long');
-        } else {
-            this.setCustomValidity('');
-        }
-    });
-
-    document.getElementById('phoneNumber').addEventListener('input', function() {
-        // Remove non-numeric characters
-        this.value = this.value.replace(/\D/g, '');
-        if (this.value.length !== 11) {
-            this.setCustomValidity('WhatsApp number must be 11 numeric characters long');
-        } else {
-            this.setCustomValidity('');
-        }
-    });
-</script>
 
 <?php require('footer.php'); ?>
