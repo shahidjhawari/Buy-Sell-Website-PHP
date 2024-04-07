@@ -1,67 +1,42 @@
 <?php
-require('top.php');
+require('top.php'); 
 
 if (!isset($_SESSION['USER_LOGIN'])) {
-?>
-    <script>
-        window.location.href = 'index.php';
-    </script>
-<?php
+    header('Location: index.php'); 
     exit;
 }
 
 $user_id = $_SESSION['USER_ID'];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $full_name = $con->real_escape_string($_POST['fullName']);
-    $father_name = $con->real_escape_string($_POST['fatherName']);
-    $cnic = $con->real_escape_string($_POST['cnic']);
-    $phone_number = $con->real_escape_string($_POST['phoneNumber']);
-    $email = $con->real_escape_string($_POST['email']);
-    $select_option = $con->real_escape_string($_POST['select1']);
-
-    $target_dir = PRODUCT_IMAGE_SERVER_PATH;
-    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-    $image_name = basename($_FILES["fileToUpload"]["name"]);
-    move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
-
-    $sql = "INSERT INTO admissions (user_id, full_name, father_name, cnic, phone_number, email, select_option, image_path)
-            VALUES ('$user_id', '$full_name', '$father_name', '$cnic', '$phone_number', '$email', '$select_option', '$image_name')";
-
-    if ($con->query($sql) === TRUE) {
-        echo "<p class='msg-feild'>Your form was sent successfully. We will contact you on your phone number.</p>";
-    } else {
-        echo "Error: " . $sql . "<br>" . $con->error;
-    }
-
-    $_SESSION['form_submitted'] = true;
-}
-
-$sql = "SELECT * FROM admissions WHERE user_id = '$user_id'";
-$result = $con->query($sql);
+$sql = "SELECT * FROM admissions WHERE user_id = ?";
+$stmt = $con->prepare($sql);
+$stmt->bind_param('s', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <style>
-    .own-table{
+    .own-table {
         margin-top: 150px;
     }
 
     .own-btn {
         margin-top: 200px;
     }
+
     @media screen and (min-width: 200px) and (max-width: 576px) {
-		.btn {
-			margin-top: 120px;
-		}
-	}
+        .btn {
+            margin-top: 120px;
+        }
+    }
 </style>
 
 <div class="container">
-    <?php
-    if ($result->num_rows > 0) {
-    ?>
+    <div style='text-align: center;'><a href='post.php' class='btn btn-warning own-btn'><i class='fas fa-plus'></i></a>
+        <p>Add new ad</p>
+    </div>
+    <?php if ($result->num_rows > 0) { ?>
         <table class="table table-responsive own-table">
-            <i class="fas fa-plus"></i>
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -71,25 +46,16 @@ $result = $con->query($sql);
                 </tr>
             </thead>
             <tbody>
-                <?php
-                while ($row = $result->fetch_assoc()) {
-                ?>
+                <?php while ($row = $result->fetch_assoc()) { ?>
                     <tr>
                         <th scope="row"><?php echo $row["id"]; ?></th>
-                        <td><?php echo $row['full_name'] ?></td>
+                        <td><?php echo $row['full_name']; ?></td>
                     </tr>
-                <?php
-                }
-                ?>
+                <?php } ?>
             </tbody>
         </table>
-    <?php
-    } else {
-        echo "<div style='text-align: center;'><a href='#' class='btn btn-warning own-btn'><i class='fas fa-plus'></i></a><p>Add new ad</p></div>";
-    }
-    ?>
+    <?php } ?>
 </div>
 
-
-
-<?php require('footer.php'); ?>
+<?php require('footer.php'); // Include footer.php 
+?>
