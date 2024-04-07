@@ -1,8 +1,8 @@
 <?php
-require('top.php'); 
+require('top.php');
 
 if (!isset($_SESSION['USER_LOGIN'])) {
-    header('Location: index.php'); 
+    header('Location: index.php');
     exit;
 }
 
@@ -16,10 +16,6 @@ $result = $stmt->get_result();
 ?>
 
 <style>
-    .own-table {
-        margin-top: 150px;
-    }
-
     .own-btn {
         margin-top: 200px;
     }
@@ -42,20 +38,30 @@ $result = $stmt->get_result();
                     <th scope="col">#</th>
                     <th scope="col">First</th>
                     <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Actions</th> <!-- Added Actions column -->
                 </tr>
             </thead>
             <tbody>
-                <?php while ($row = $result->fetch_assoc()) { ?>
+                <?php
+                while ($row = $result->fetch_assoc()) {
+                    ?>
                     <tr>
-                        <th scope="row"><?php echo $row["id"]; ?></th>
+                        <td><?php echo $row["id"]; ?></td>
                         <td><?php echo $row['full_name']; ?></td>
+                        <td><?php echo $row['father_name']; ?></td>
+                        <td>
+                            <!-- Edit button -->
+                            <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-primary">Edit</a>
+                            <!-- Delete button -->
+                            <a href="delete.php?id=<?php echo $row['id']; ?>" class="btn btn-danger">Delete</a>
+                        </td>
                     </tr>
-                <?php } ?>
+                <?php
+                }
+                ?>
             </tbody>
         </table>
     <?php } ?>
 </div>
 
-<?php require('footer.php'); // Include footer.php 
-?>
+<?php require('footer.php'); ?>
