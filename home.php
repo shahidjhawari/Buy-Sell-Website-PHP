@@ -1,23 +1,18 @@
 <?php
 require('top.php');
 
-// Check if the user is logged in
 if (!isset($_SESSION['USER_LOGIN'])) {
     ?>
     <script>
         window.location.href = 'index.php';
     </script>
     <?php
-    exit; // Stop further execution
+    exit; 
 }
 
-// Get the user ID of the logged-in user
 $user_id = $_SESSION['USER_ID'];
 
-// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Process form submission
-    // Escape and retrieve form data
     $full_name = $con->real_escape_string($_POST['fullName']);
     $father_name = $con->real_escape_string($_POST['fatherName']);
     $cnic = $con->real_escape_string($_POST['cnic']);
@@ -25,13 +20,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $con->real_escape_string($_POST['email']);
     $select_option = $con->real_escape_string($_POST['select1']);
 
-    // Handle file upload
     $target_dir = PRODUCT_IMAGE_SERVER_PATH;
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $image_name = basename($_FILES["fileToUpload"]["name"]);
     move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
 
-    // Insert form data into the database
     $sql = "INSERT INTO admissions (user_id, full_name, father_name, cnic, phone_number, email, select_option, image_path)
             VALUES ('$user_id', '$full_name', '$father_name', '$cnic', '$phone_number', '$email', '$select_option', '$image_name')";
 
@@ -41,22 +34,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error: " . $sql . "<br>" . $con->error;
     }
 
-    // Mark the form submission as completed for this session
     $_SESSION['form_submitted'] = true;
 }
 
-// Fetch and display forms submitted by the logged-in user
 $sql = "SELECT * FROM admissions WHERE user_id = '$user_id'";
 $result = $con->query($sql);
 ?>
 
-<style>
-    /* Your CSS styles */
-</style>
-
 <div class="container box">
     <h2>Admission Form</h2>
-    <!-- Display the form -->
     <form action="#" method="post" enctype="multipart/form-data">
     <div class="form-group">
             <label for="fullName">Full Name:</label>
@@ -94,14 +80,9 @@ $result = $con->query($sql);
     </form>
 
     <?php
-    // Display previously submitted forms
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            // Display each form entry
-            // You can customize the display as per your requirement
             echo "<p>Full Name: " . $row['full_name'] . "</p>";
-            echo "<p>Father Name: " . $row['father_name'] . "</p>";
-            // Display other form fields similarly
         }
     } else {
         echo "<p>No forms submitted yet.</p>";
