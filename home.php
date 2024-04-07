@@ -2,12 +2,12 @@
 require('top.php');
 
 if (!isset($_SESSION['USER_LOGIN'])) {
-    ?>
+?>
     <script>
         window.location.href = 'index.php';
     </script>
-    <?php
-    exit; 
+<?php
+    exit;
 }
 
 $user_id = $_SESSION['USER_ID'];
@@ -41,53 +41,52 @@ $sql = "SELECT * FROM admissions WHERE user_id = '$user_id'";
 $result = $con->query($sql);
 ?>
 
-<div class="container box">
-    <h2>Admission Form</h2>
-    <form action="#" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-            <label for="fullName">Full Name:</label>
-            <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter Full Name" required>
-        </div>
-        <div class="form-group">
-            <label for="fatherName">Father Name:</label>
-            <input type="text" class="form-control" id="fatherName" name="fatherName" placeholder="Enter Father Name" required>
-        </div>
-        <div class="form-group">
-            <label for="cnic">CNIC:</label>
-            <input type="text" class="form-control" maxlength="13" id="cnic" name="cnic" placeholder="Enter CNIC" required>
-        </div>
-        <div class="form-group">
-            <label for="phoneNumber">WhatsApp Number:</label>
-            <input type="text" class="form-control" id="phoneNumber" maxlength="11" name="phoneNumber" placeholder="Enter Whatsapp Number" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" maxlength="30" id="email" name="email" placeholder="Enter Email" required>
-        </div>
-        <div class="form-group">
-            <label for="select1">Select Courses:</label>
-            <select class="form-control" id="select1" name="select1" required>
-                <option value="Web Development">Web Development</option>
-                <option value="Web Designing">Web Designing</option>
-                <option value="Ethical Hacking">Ethical Hacking</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="fileToUpload">Upload Image:</label>
-            <input type="file" class="form-control-file" id="fileToUpload" name="fileToUpload" accept="image/*" required>
-        </div>
-        <button type="submit" class="btn btn-warning mt-3 mb-5">Submit</button>
-    </form>
+<style>
+    .table {
+        margin-top: 150px;
+    }
 
+    .btn {
+        margin-top: 200px;
+    }
+</style>
+
+<div class="container">
     <?php
     if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo "<p>Full Name: " . $row['full_name'] . "</p>";
-        }
+    ?>
+        <table class="table table-responsive">
+            <i class="fas fa-plus"></i>
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                while ($row = $result->fetch_assoc()) {
+                ?>
+                    <tr>
+                        <th scope="row"><?php echo $row["id"]; ?></th>
+                        <td><?php echo $row['full_name'] ?></td>
+                    </tr>
+                <?php
+                }
+                ?>
+            </tbody>
+        </table>
+    <?php
     } else {
-        echo "<p>No forms submitted yet.</p>";
+        echo "<div style='text-align: center;'>";
+        echo "<a href='#' class='btn btn-warning'><i class='fas fa-plus'></i></a>";
+        echo "<spam>fds</span></div>";
     }
     ?>
 </div>
+
+
 
 <?php require('footer.php'); ?>
