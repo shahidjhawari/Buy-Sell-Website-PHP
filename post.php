@@ -6,7 +6,7 @@ if (!isset($_SESSION['USER_LOGIN'])) {
     <script>
         window.location.href = 'index.php';
     </script>
-<?php
+    <?php
     exit;
 }
 
@@ -29,8 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             VALUES ('$user_id', '$full_name', '$father_name', '$cnic', '$phone_number', '$email', '$select_option', '$image_name')";
 
     if ($con->query($sql) === TRUE) { ?>
-        <script> window.location.href = "home.php"</script>
-    <?php } else {
+        <script>
+            window.location.href = "home.php"
+        </script>
+<?php } else {
         echo "Error: " . $sql . "<br>" . $con->error;
     }
 
@@ -49,7 +51,7 @@ $result = $con->query($sql);
 
 <div class="container post-box">
     <form method="post" enctype="multipart/form-data">
-    <div class="form-group">
+        <div class="form-group">
             <label for="fullName">Full Name:</label>
             <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter Full Name" required>
         </div>
