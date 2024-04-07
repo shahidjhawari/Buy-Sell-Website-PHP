@@ -42,20 +42,25 @@ $result = $con->query($sql);
 ?>
 
 <style>
-    .table {
+    .own-table{
         margin-top: 150px;
     }
 
-    .btn {
+    .own-btn {
         margin-top: 200px;
     }
+    @media screen and (min-width: 200px) and (max-width: 576px) {
+		.btn {
+			margin-top: 120px;
+		}
+	}
 </style>
 
 <div class="container">
     <?php
     if ($result->num_rows > 0) {
     ?>
-        <table class="table table-responsive">
+        <table class="table table-responsive own-table">
             <i class="fas fa-plus"></i>
             <thead>
                 <tr>
@@ -80,9 +85,7 @@ $result = $con->query($sql);
         </table>
     <?php
     } else {
-        echo "<div style='text-align: center;'>";
-        echo "<a href='#' class='btn btn-warning'><i class='fas fa-plus'></i></a>";
-        echo "<spam>fds</span></div>";
+        echo "<div style='text-align: center;'><a href='#' class='btn btn-warning own-btn'><i class='fas fa-plus'></i></a><p>Add new ad</p></div>";
     }
     ?>
 </div>
