@@ -1,4 +1,13 @@
-<?php require('top.php'); ?>
+<?php 
+require('top.php');
+if(isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN']=='yes'){
+	?>
+	<script>
+		window.location.href='index.php';
+	</script>
+	<?php
+}
+?>
 <style>
 	.login_box_area {
 		margin-top: 100px;

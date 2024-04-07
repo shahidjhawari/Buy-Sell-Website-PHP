@@ -1,120 +1,144 @@
-<?php
-require('top.php');
-if (!isset($_SESSION['USER_LOGIN'])) {
-?>
+<?php require('top.php');
+
+if (!isset($_SESSION['USER_LOGIN'])) { ?>
     <script>
-        window.location.href = 'login.php';
+        window.location.href = 'index.php';
     </script>
-<?php
-}
-?>
+<?php } ?> <?php
+            if (isset($_SESSION['form_submitted']) && $_SESSION['form_submitted'] === true) {
+                echo "<p class='msg-feild'>You have already submitted the form. We will contact you soon!</p>";
+                $disabled = "disabled";
+            } else {
+                $disabled = "";
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    $full_name = $con->real_escape_string($_POST['fullName']);
+                    $father_name = $con->real_escape_string($_POST['fatherName']);
+                    $cnic = $con->real_escape_string($_POST['cnic']);
+                    $phone_number = $con->real_escape_string($_POST['phoneNumber']);
+                    $email = $con->real_escape_string($_POST['email']);
+                    $select_option = $con->real_escape_string($_POST['select1']);
+
+                    $target_dir = PRODUCT_IMAGE_SERVER_PATH;
+                    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+                    $image_name = basename($_FILES["fileToUpload"]["name"]);
+                    move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
+
+                    $sql = "INSERT INTO admissions (full_name, father_name, cnic, phone_number, email, select_option, image_path)
+                VALUES ('$full_name', '$father_name', '$cnic', '$phone_number', '$email', '$select_option', '$image_name')";
+
+                    if ($con->query($sql) === TRUE) {
+                        echo "<p class='msg-feild'>Your form was sent successfully. We will contact you on your phone number.</p>";
+                        $_SESSION['form_submitted'] = true;
+                        $disabled = "disabled";
+                    } else {
+                        echo "Error: " . $sql . "<br>" . $con->error;
+                    }
+                }
+            }
+            ?>
+
 
 <style>
-    .section-top-border {
-        margin-top: 150px;
+    .box {
+        margin-top: 200px;
+        margin-bottom: 40px;
     }
 
-    @media screen and (min-width: 200px) and (max-width: 576px) {
-        .section-top-border {
-            margin-top: 100px;
+    .msg-feild {
+        text-align: center;
+        color: red;
+        transform: translateY(550px);
+        font-weight: bold;
+    }
+
+    @media screen and (min-width: 200px) and (max-width: 996px) {
+        .msg-feild {
+            text-align: center;
+            color: red;
+            transform: translateY(720px);
+            font-weight: bold;
+            margin-bottom: 60px;
+            margin-top: 30px;
         }
     }
 </style>
 
-<div class="container">
-<div class="section-top-border">
-    <h3 class="mb-30">Table</h3>
-    <div class="progress-table-wrap">
-        <div class="progress-table">
-            <div class="table-head">
-                <div class="serial">#</div>
-                <div class="country">Countries</div>
-                <div class="visit">Visits</div>
-                <div class="percentage">Percentages</div>
-            </div>
-            <div class="table-row">
-                <div class="serial">01</div>
-                <div class="country"> <img src="img/elements/f1.jpg" alt="flag">Canada</div>
-                <div class="visit">645032</div>
-                <div class="percentage">
-                    <div class="progress">
-                        <div class="progress-bar color-1" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="table-row">
-                <div class="serial">02</div>
-                <div class="country"> <img src="img/elements/f2.jpg" alt="flag">Canada</div>
-                <div class="visit">645032</div>
-                <div class="percentage">
-                    <div class="progress">
-                        <div class="progress-bar color-2" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="table-row">
-                <div class="serial">03</div>
-                <div class="country"> <img src="img/elements/f3.jpg" alt="flag">Canada</div>
-                <div class="visit">645032</div>
-                <div class="percentage">
-                    <div class="progress">
-                        <div class="progress-bar color-3" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="table-row">
-                <div class="serial">04</div>
-                <div class="country"> <img src="img/elements/f4.jpg" alt="flag">Canada</div>
-                <div class="visit">645032</div>
-                <div class="percentage">
-                    <div class="progress">
-                        <div class="progress-bar color-4" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="table-row">
-                <div class="serial">05</div>
-                <div class="country"> <img src="img/elements/f5.jpg" alt="flag">Canada</div>
-                <div class="visit">645032</div>
-                <div class="percentage">
-                    <div class="progress">
-                        <div class="progress-bar color-5" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="table-row">
-                <div class="serial">06</div>
-                <div class="country"> <img src="img/elements/f6.jpg" alt="flag">Canada</div>
-                <div class="visit">645032</div>
-                <div class="percentage">
-                    <div class="progress">
-                        <div class="progress-bar color-6" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="table-row">
-                <div class="serial">07</div>
-                <div class="country"> <img src="img/elements/f7.jpg" alt="flag">Canada</div>
-                <div class="visit">645032</div>
-                <div class="percentage">
-                    <div class="progress">
-                        <div class="progress-bar color-7" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="table-row">
-                <div class="serial">08</div>
-                <div class="country"> <img src="img/elements/f8.jpg" alt="flag">Canada</div>
-                <div class="visit">645032</div>
-                <div class="percentage">
-                    <div class="progress">
-                        <div class="progress-bar color-8" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-            </div>
+<div class="container box">
+    <h2>Admission Form</h2>
+    <form action="#" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="fullName">Full Name:</label>
+            <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter Full Name" required>
         </div>
-    </div>
+        <div class="form-group">
+            <label for="fatherName">Father Name:</label>
+            <input type="text" class="form-control" id="fatherName" name="fatherName" placeholder="Enter Father Name" required>
+        </div>
+        <div class="form-group">
+            <label for="cnic">CNIC:</label>
+            <input type="text" class="form-control" maxlength="13" id="cnic" name="cnic" placeholder="Enter CNIC" required>
+        </div>
+        <div class="form-group">
+            <label for="phoneNumber">WhatsApp Number:</label>
+            <input type="text" class="form-control" id="phoneNumber" maxlength="11" name="phoneNumber" placeholder="Enter Whatsapp Number" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" maxlength="30" id="email" name="email" placeholder="Enter Email" required>
+        </div>
+        <div class="form-group">
+            <label for="select1">Select Courses:</label>
+            <select class="form-control" id="select1" name="select1" required>
+                <option value="Web Development">Web Development</option>
+                <option value="Web Designing">Web Designing</option>
+                <option value="Ethical Hacking">Ethical Hacking</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="fileToUpload">Upload Image:</label>
+            <input type="file" class="form-control-file" id="fileToUpload" name="fileToUpload" accept="image/*" required>
+        </div>
+        <button type="submit" class="btn btn-warning mt-3 mb-5" <?php echo $disabled; ?>>Submit</button>
+    </form>
 </div>
-</div>
+
+<script>
+    // Client-side validation script
+    document.getElementById('fullName').addEventListener('input', function() {
+        if (this.value.length > 30) {
+            this.setCustomValidity('Name cannot exceed 30 characters');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    document.getElementById('fatherName').addEventListener('input', function() {
+        if (this.value.length > 30) {
+            this.setCustomValidity('Father Name cannot exceed 30 characters');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    document.getElementById('cnic').addEventListener('input', function() {
+        // Remove non-numeric characters
+        this.value = this.value.replace(/\D/g, '');
+        if (this.value.length !== 13) {
+            this.setCustomValidity('CNIC must be 13 numeric characters long');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    document.getElementById('phoneNumber').addEventListener('input', function() {
+        // Remove non-numeric characters
+        this.value = this.value.replace(/\D/g, '');
+        if (this.value.length !== 11) {
+            this.setCustomValidity('WhatsApp number must be 11 numeric characters long');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+</script>
 
 <?php require('footer.php'); ?>
