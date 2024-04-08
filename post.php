@@ -21,25 +21,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone_number = $con->real_escape_string($_POST['phoneNumber']);
     $address = $con->real_escape_string($_POST['address']);
 
-    // Array to store uploaded image names
     $image_names = array();
 
-    // Loop through each uploaded file
     foreach ($_FILES['fileToUpload']['tmp_name'] as $key => $tmp_name) {
+        if (count($_FILES['fileToUpload']['tmp_name']) < 3 || count($_FILES['fileToUpload']['tmp_name']) > 10) {
+            echo "You must upload minimum 3 and maximum 10 images.";
+            exit;
+        }
+
+        if ($_FILES['fileToUpload']['size'][$key] > 1024 * 1024) { 
+            echo "File size must be less than 1 MB.";
+            exit;
+        }
+
         $target_dir = PRODUCT_IMAGE_SERVER_PATH;
         $image_name = basename($_FILES["fileToUpload"]["name"][$key]);
         $target_file = $target_dir . $image_name;
-        
-        // Move the uploaded file to the target directory
-        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"][$key], $target_file)) {
-            $image_names[] = $image_name; // Store the image name
-        }
+
+        compressImage($_FILES["fileToUpload"]["tmp_name"][$key], $target_file, 1024);
+
+        $image_names[] = $image_name; 
     }
 
-    // Convert image names array to a comma-separated string
     $image_path = implode(',', $image_names);
 
-    // Insert data into the database
     $sql = "INSERT INTO post (user_id, full_name, product_name, price, detail, select_option, phone_number, address, image_path)
             VALUES ('$user_id', '$full_name', '$product_name', $price, '$detail', '$select_option', '$phone_number', '$address', '$image_path')";
 
@@ -114,3 +119,15 @@ $result = $con->query($sql);
 </div>
 
 <?php require('footer.php'); ?>
+
+<?php
+function compressImage($source, $destination, $quality) {
+    $info = getimagesize($source);
+    if ($info['mime'] == 'image/jpeg') {
+        $image = imagecreatefromjpeg($source);
+    } elseif ($info['mime'] == 'image/png') {
+        $image = imagecreatefrompng($source);
+    }
+    imagejpeg($image, $destination, $quality);
+}
+?>
