@@ -2,7 +2,7 @@
 require('top.php');
 
 if (!isset($_SESSION['USER_LOGIN'])) {
-?>
+    ?>
     <script>
         window.location.href = 'index.php';
     </script>
@@ -21,19 +21,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone_number = $con->real_escape_string($_POST['phoneNumber']);
     $address = $con->real_escape_string($_POST['address']);
 
-    $target_dir = PRODUCT_IMAGE_SERVER_PATH;
-    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-    $image_name = basename($_FILES["fileToUpload"]["name"]);
-    move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
+    // Array to store uploaded image names
+    $image_names = array();
 
+    // Loop through each uploaded file
+    foreach ($_FILES['fileToUpload']['tmp_name'] as $key => $tmp_name) {
+        $target_dir = PRODUCT_IMAGE_SERVER_PATH;
+        $image_name = basename($_FILES["fileToUpload"]["name"][$key]);
+        $target_file = $target_dir . $image_name;
+        
+        // Move the uploaded file to the target directory
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"][$key], $target_file)) {
+            $image_names[] = $image_name; // Store the image name
+        }
+    }
+
+    // Convert image names array to a comma-separated string
+    $image_path = implode(',', $image_names);
+
+    // Insert data into the database
     $sql = "INSERT INTO post (user_id, full_name, product_name, price, detail, select_option, phone_number, address, image_path)
-            VALUES ('$user_id', '$full_name', '$product_name', $price, '$detail', '$select_option', '$phone_number', '$address', '$image_name')";
+            VALUES ('$user_id', '$full_name', '$product_name', $price, '$detail', '$select_option', '$phone_number', '$address', '$image_path')";
 
     if ($con->query($sql) === TRUE) { ?>
         <script>
             window.location.href = "home.php"
         </script>
-<?php } else {
+    <?php } else {
         echo "Error: " . $sql . "<br>" . $con->error;
     }
 
@@ -92,8 +106,8 @@ $result = $con->query($sql);
             <input type="text" class="form-control" maxlength="30" id="address" name="address" placeholder="Enter Address" required>
         </div>
         <div class="form-group">
-            <label for="fileToUpload">Upload Image:</label>
-            <input type="file" class="form-control-file" id="fileToUpload" name="fileToUpload" accept="image/*" required>
+            <label for="fileToUpload">Upload Images:</label>
+            <input type="file" class="form-control-file" id="fileToUpload" name="fileToUpload[]" accept="image/*" multiple required>
         </div>
         <button type="submit" class="btn btn-warning mt-3 mb-5">Submit</button>
     </form>
