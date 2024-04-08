@@ -106,6 +106,7 @@ $result = $con->query($sql);
             <label for="phoneNumber">Contact Number:</label>
             <input type="text" class="form-control" id="phoneNumber" maxlength="11" name="phoneNumber" placeholder="Enter Contact Number" required>
         </div>
+        
         <div class="form-group">
             <label for="email">Address:</label>
             <input type="text" class="form-control" maxlength="30" id="address" name="address" placeholder="Enter Address" required>
