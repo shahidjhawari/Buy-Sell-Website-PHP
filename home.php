@@ -43,8 +43,8 @@ $result = $stmt->get_result();
                         <th scope="col">First</th>
                         <th scope="col">Last</th>
                         <th scope="col">Last</th>
-                        <th scope="col">Edit</th> <!-- Added Actions column -->
-                        <th scope="col">Delete</th> <!-- Added Actions column -->
+                        <th scope="col">Edit</th> 
+                        <th scope="col">Delete</th> 
                     </tr>
                 </thead>
                 <tbody>
