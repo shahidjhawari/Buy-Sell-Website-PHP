@@ -56,7 +56,6 @@ $result = $stmt->get_result();
                             <td><?php echo $row['detail']; ?></td>
                             <td><a href="edit.php?id=<?php echo $row['id']; ?>"><i class='fas fa-edit fa-2x' style="color: #191919;"></i></a></td>
                             <td><a href="delete.php?id=<?php echo $row['id']; ?>"><i class='fas fa-trash fa-2x' style="color: #9A031E;"></i></a></td>
-
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
