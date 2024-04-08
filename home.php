@@ -28,6 +28,8 @@ $result = $stmt->get_result();
 </style>
 
 <div class="container">
+    <a href="logout.php">Logout</a>
+    <?php echo $_SESSION['USER_NAME'] ?>
     <div style='text-align: center;'><a href='post.php' class='btn btn-warning own-btn'><i class='fas fa-plus'></i></a>
         <p>Add new ad</p>
     </div>
