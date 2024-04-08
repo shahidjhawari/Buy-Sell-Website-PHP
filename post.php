@@ -15,6 +15,7 @@ $user_id = $_SESSION['USER_ID'];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $full_name = $con->real_escape_string($_POST['fullName']);
     $product_name = $con->real_escape_string($_POST['productName']);
+    $price = $con->real_escape_string($_POST['price']);
     $detail = $con->real_escape_string($_POST['detail']);
     $select_option = $con->real_escape_string($_POST['select1']);
     $phone_number = $con->real_escape_string($_POST['phoneNumber']);
@@ -25,8 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $image_name = basename($_FILES["fileToUpload"]["name"]);
     move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
 
-    $sql = "INSERT INTO admissions (user_id, full_name, product_name, detail, select_option, phone_number, address, image_path)
-            VALUES ('$user_id', '$full_name', '$product_name', '$detail', '$select_option', '$phone_number', '$address', '$image_name')";
+    $sql = "INSERT INTO admissions (user_id, full_name, product_name, price, detail, select_option, phone_number, address, image_path)
+            VALUES ('$user_id', '$full_name', '$product_name', $price, '$detail', '$select_option', '$phone_number', '$address', '$image_name')";
 
     if ($con->query($sql) === TRUE) { ?>
         <script>
@@ -58,6 +59,10 @@ $result = $con->query($sql);
         <div class="form-group">
             <label for="fatherName">Product Name:</label>
             <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter Product Name" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Selling Price:</label>
+            <input type="text" class="form-control" id="price" name="price" placeholder="Enter Price" required>
         </div>
         <div class="form-group">
             <label for="message">Product Detail:</label>

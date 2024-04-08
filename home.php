@@ -1,10 +1,11 @@
 <?php
 require('top.php');
 
-if (!isset($_SESSION['USER_LOGIN'])) {
-    header('Location: index.php');
-    exit;
-}
+if (!isset($_SESSION['USER_LOGIN'])) { ?>
+    <script>
+        window.location.href = "login.php";
+    </script>
+<?php }
 
 $user_id = $_SESSION['USER_ID'];
 
@@ -28,6 +29,7 @@ $result = $stmt->get_result();
 </style>
 
 <div class="container">
+    <a href="logout.php">logout</a>
     <div style='text-align: center;'><a href='post.php' class='btn btn-warning own-btn'><i class='fas fa-plus'></i></a>
         <p>Add new ad</p>
     </div>
