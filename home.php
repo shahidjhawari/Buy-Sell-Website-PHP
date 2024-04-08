@@ -9,7 +9,7 @@ if (!isset($_SESSION['USER_LOGIN'])) { ?>
 
 $user_id = $_SESSION['USER_ID'];
 
-$sql = "SELECT * FROM admissions WHERE user_id = ?";
+$sql = "SELECT * FROM post WHERE user_id = ?";
 $stmt = $con->prepare($sql);
 $stmt->bind_param('s', $user_id);
 $stmt->execute();

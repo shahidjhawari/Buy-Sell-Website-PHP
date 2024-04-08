@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $image_name = basename($_FILES["fileToUpload"]["name"]);
     move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
 
-    $sql = "INSERT INTO admissions (user_id, full_name, product_name, price, detail, select_option, phone_number, address, image_path)
+    $sql = "INSERT INTO post (user_id, full_name, product_name, price, detail, select_option, phone_number, address, image_path)
             VALUES ('$user_id', '$full_name', '$product_name', $price, '$detail', '$select_option', '$phone_number', '$address', '$image_name')";
 
     if ($con->query($sql) === TRUE) { ?>
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['form_submitted'] = true;
 }
 
-$sql = "SELECT * FROM admissions WHERE user_id = '$user_id'";
+$sql = "SELECT * FROM post WHERE user_id = '$user_id'";
 $result = $con->query($sql);
 ?>
 
