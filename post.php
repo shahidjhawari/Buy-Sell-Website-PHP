@@ -26,20 +26,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     } else {
 
-    // Array to store uploaded image names
     $image_names = array();
 
-    // Counter for uploaded images
     $uploaded_images_count = 0;
 
-    // Loop through each uploaded file
     for ($i = 1; $i <= 5; $i++) {
         if ($_FILES["fileToUpload$i"]["size"] > 0) {
             $target_dir = PRODUCT_IMAGE_SERVER_PATH;
             $target_file = $target_dir . basename($_FILES["fileToUpload$i"]["name"]);
             $image_name = basename($_FILES["fileToUpload$i"]["name"]);
 
-            // Move uploaded file to target directory
             if (move_uploaded_file($_FILES["fileToUpload$i"]["tmp_name"], $target_file)) {
                 $image_names[] = $image_name;
                 $uploaded_images_count++;
@@ -47,17 +43,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Check if minimum 3 images are uploaded
-    
-        // Prepare column names for images
+
         $image_columns = implode(", ", array_map(function ($index) {
             return "image$index";
         }, range(1, count($image_names))));
 
-        // Prepare image values for SQL query
         $image_values = "'" . implode("', '", $image_names) . "'";
 
-        // Insert into the database
         $sql = "INSERT INTO post (user_id, full_name, product_name, price, detail, select_option, phone_number, address, $image_columns)
             VALUES ('$user_id', '$full_name', '$product_name', $price, '$detail', '$select_option', '$phone_number', '$address', $image_values)";
 
