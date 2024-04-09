@@ -1,12 +1,9 @@
 <?php
 require('top.php');
 
+// Check if user is logged in
 if (!isset($_SESSION['USER_LOGIN'])) {
-?>
-    <script>
-        window.location.href = 'index.php';
-    </script>
-    <?php
+    header("Location: index.php");
     exit;
 }
 
@@ -21,53 +18,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone_number = $con->real_escape_string($_POST['phoneNumber']);
     $address = $con->real_escape_string($_POST['address']);
 
+    // Ensure at least 3 images are uploaded
+    $uploaded_images_count = 0;
+    $image_names = array();
+
+    for ($i = 1; $i <= 5; $i++) {
+        if ($_FILES["fileToUpload$i"]["size"] > 0) {
+            $target_dir = PRODUCT_IMAGE_SERVER_PATH;
+            $target_file = $target_dir . basename($_FILES["fileToUpload$i"]["name"]);
+            $image_name = basename($_FILES["fileToUpload$i"]["name"]);
+
+            if (move_uploaded_file($_FILES["fileToUpload$i"]["tmp_name"], $target_file)) {
+                $image_names[] = $image_name;
+                $uploaded_images_count++;
+            }
+        }
+    }
+
     if ($uploaded_images_count < 3) {
         echo "<script>alert('Please upload minimum 3 images.'); window.location.href = 'post.php';</script>";
         exit;
-    } else {
-
-        $image_names = array();
-
-        $uploaded_images_count = 0;
-
-        for ($i = 1; $i <= 5; $i++) {
-            if ($_FILES["fileToUpload$i"]["size"] > 0) {
-                $target_dir = PRODUCT_IMAGE_SERVER_PATH;
-                $target_file = $target_dir . basename($_FILES["fileToUpload$i"]["name"]);
-                $image_name = basename($_FILES["fileToUpload$i"]["name"]);
-
-                if (move_uploaded_file($_FILES["fileToUpload$i"]["tmp_name"], $target_file)) {
-                    $image_names[] = $image_name;
-                    $uploaded_images_count++;
-                }
-            }
-        }
-
-
-        $image_columns = implode(", ", array_map(function ($index) {
-            return "image$index";
-        }, range(1, count($image_names))));
-
-        $image_values = "'" . implode("', '", $image_names) . "'";
-
-        $sql = "INSERT INTO post (user_id, full_name, product_name, price, detail, select_option, phone_number, address, $image_columns)
-            VALUES ('$user_id', '$full_name', '$product_name', $price, '$detail', '$select_option', '$phone_number', '$address', $image_values)";
-
-        if ($con->query($sql) === TRUE) { ?>
-            <script>
-                window.location.href = "home.php"
-            </script>
-<?php } else {
-            echo "Error: " . $sql . "<br>" . $con->error;
-        }
-
-        $_SESSION['form_submitted'] = true;
     }
 
-    $sql = "SELECT * FROM post WHERE user_id = '$user_id'";
-    $result = $con->query($sql);
+    // Insert post into database
+    $image_columns = implode(", ", array_map(function ($index) {
+        return "image$index";
+    }, range(1, count($image_names))));
+
+    $image_values = "'" . implode("', '", $image_names) . "'";
+
+    $sql = "INSERT INTO post (user_id, full_name, product_name, price, detail, select_option, phone_number, address, $image_columns)
+        VALUES ('$user_id', '$full_name', '$product_name', $price, '$detail', '$select_option', '$phone_number', '$address', $image_values)";
+
+    if ($con->query($sql) === TRUE) {
+        // Redirect to home page after successful insertion
+        header("Location: home.php");
+        exit;
+    } else {
+        // Handle database error
+        echo "Error: " . $sql . "<br>" . $con->error;
+    }
+
+    // Set session variable to indicate form submission
+    $_SESSION['form_submitted'] = true;
 }
 
+// Retrieve posts by the user
+$sql = "SELECT * FROM post WHERE user_id = '$user_id'";
+$result = $con->query($sql);
 ?>
 
 <style>
@@ -75,7 +73,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         margin-top: 200px;
     }
 
-    /* Custom file input style */
     .custom-file-input {
         cursor: pointer;
         position: relative;
@@ -117,6 +114,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         content: "Browse";
     }
 </style>
+
+<script>
+    // Function to update label text when a file is selected
+    function updateLabel(input) {
+        var label = input.nextElementSibling;
+        var fileName = input.files[0].name;
+        label.textContent = fileName ? 'Image Added' : 'Choose file';
+    }
+</script>
 
 <div class="container post-box">
     <form method="post" enctype="multipart/form-data">
@@ -164,7 +170,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
                 <label for="fileToUpload<?= $i ?>">Upload Image <?= $i ?>:</label>
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="fileToUpload<?= $i ?>" name="fileToUpload<?= $i ?>" accept=".png, .jpg, .jpeg">
+                    <input type="file" class="custom-file-input" id="fileToUpload<?= $i ?>" name="fileToUpload<?= $i ?>" accept=".png, .jpg, .jpeg" onchange="updateLabel(this)">
                     <label class="custom-file-label" for="fileToUpload<?= $i ?>">Choose file</label>
                 </div>
             </div>
@@ -174,3 +180,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 <?php require('footer.php'); ?>
+
+<script>
+    document.getElementById('fileToUpload<?= $i ?>').addEventListener('change', function() {
+        var fileName = this.files[0].name;
+        document.getElementById('fileLabel<?= $i ?>').innerHTML = fileName;
+        document.getElementById('fileHelp<?= $i ?>').innerHTML = "File chosen: " + fileName;
+    });
+</script>
