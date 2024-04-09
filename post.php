@@ -6,7 +6,7 @@ if (!isset($_SESSION['USER_LOGIN'])) {
     <script>
         window.location.href = 'index.php';
     </script>
-<?php
+    <?php
     exit;
 }
 
@@ -21,8 +21,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone_number = $con->real_escape_string($_POST['phoneNumber']);
     $address = $con->real_escape_string($_POST['address']);
 
+    if ($uploaded_images_count < 3) {
+        echo "<script>alert('Please upload minimum 3 images.'); window.location.href = 'post.php';</script>";
+        exit;
+    } else {
+
     // Array to store uploaded image names
     $image_names = array();
+
+    // Counter for uploaded images
+    $uploaded_images_count = 0;
 
     // Loop through each uploaded file
     for ($i = 1; $i <= 5; $i++) {
@@ -32,36 +40,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $image_name = basename($_FILES["fileToUpload$i"]["name"]);
 
             // Move uploaded file to target directory
-            move_uploaded_file($_FILES["fileToUpload$i"]["tmp_name"], $target_file);
-            $image_names[] = $image_name;
+            if (move_uploaded_file($_FILES["fileToUpload$i"]["tmp_name"], $target_file)) {
+                $image_names[] = $image_name;
+                $uploaded_images_count++;
+            }
         }
     }
 
-    // Prepare column names for images
-    $image_columns = implode(", ", array_map(function ($index) {
-        return "image$index";
-    }, range(1, count($image_names))));
+    // Check if minimum 3 images are uploaded
+    
+        // Prepare column names for images
+        $image_columns = implode(", ", array_map(function ($index) {
+            return "image$index";
+        }, range(1, count($image_names))));
 
-    // Prepare image values for SQL query
-    $image_values = "'" . implode("', '", $image_names) . "'";
+        // Prepare image values for SQL query
+        $image_values = "'" . implode("', '", $image_names) . "'";
 
-    // Insert into the database
-    $sql = "INSERT INTO post (user_id, full_name, product_name, price, detail, select_option, phone_number, address, $image_columns)
+        // Insert into the database
+        $sql = "INSERT INTO post (user_id, full_name, product_name, price, detail, select_option, phone_number, address, $image_columns)
             VALUES ('$user_id', '$full_name', '$product_name', $price, '$detail', '$select_option', '$phone_number', '$address', $image_values)";
 
-    if ($con->query($sql) === TRUE) { ?>
-        <script>
-            window.location.href = "home.php"
-        </script>
+        if ($con->query($sql) === TRUE) { ?>
+            <script>
+                window.location.href = "home.php"
+            </script>
 <?php } else {
-        echo "Error: " . $sql . "<br>" . $con->error;
+            echo "Error: " . $sql . "<br>" . $con->error;
+        }
+
+        $_SESSION['form_submitted'] = true;
     }
 
-    $_SESSION['form_submitted'] = true;
+    $sql = "SELECT * FROM post WHERE user_id = '$user_id'";
+    $result = $con->query($sql);
 }
 
-$sql = "SELECT * FROM post WHERE user_id = '$user_id'";
-$result = $con->query($sql);
 ?>
 
 <style>
@@ -107,7 +121,7 @@ $result = $con->query($sql);
             <label for="phoneNumber">Contact Number:</label>
             <input type="text" class="form-control" id="phoneNumber" maxlength="11" name="phoneNumber" placeholder="Enter Contact Number" required>
         </div>
-        
+
         <div class="form-group">
             <label for="email">Address:</label>
             <input type="text" class="form-control" maxlength="30" id="address" name="address" placeholder="Enter Address" required>
