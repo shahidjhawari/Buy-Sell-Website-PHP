@@ -123,15 +123,3 @@ $result = $con->query($sql);
 </div>
 
 <?php require('footer.php'); ?>
-
-<?php
-function compressImage($source, $destination, $quality) {
-    $info = getimagesize($source);
-    if ($info['mime'] == 'image/jpeg') {
-        $image = imagecreatefromjpeg($source);
-    } elseif ($info['mime'] == 'image/png') {
-        $image = imagecreatefrompng($source);
-    }
-    imagejpeg($image, $destination, $quality);
-}
-?>
