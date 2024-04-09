@@ -39,10 +39,10 @@ $result = $stmt->get_result();
             <table class="table own-table">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Last</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Product Detail</th>
+                        <th scope="col">Selling Price</th>
                         <th scope="col">Edit</th> 
                         <th scope="col">Delete</th> 
                     </tr>
@@ -50,12 +50,12 @@ $result = $stmt->get_result();
                 <tbody>
                     <?php while ($row = $result->fetch_assoc()) : ?>
                         <tr>
-                            <td><?php echo $row["id"]; ?></td>
                             <td><?php echo $row['full_name']; ?></td>
                             <td><?php echo $row['product_name']; ?></td>
                             <td><?php echo $row['detail']; ?></td>
-                            <td><a href="edit.php?id=<?php echo $row['id']; ?>"><i class='fas fa-edit fa-2x' style="color: #191919;"></i></a></td>
-                            <td><a href="delete.php?id=<?php echo $row['id']; ?>"><i class='fas fa-trash fa-2x' style="color: #9A031E;"></i></a></td>
+                            <td><?php echo "Rs. " . $row['price']; ?></td>
+                            <td><a href="edit.php?id=<?php echo $row['id']; ?>"><i class='fas fa-edit fa-1x' style="color: #191919;"></i></a></td>
+                            <td><a href="delete.php?id=<?php echo $row['id']; ?>"><i class='fas fa-trash fa-1x' style="color: #9A031E;"></i></a></td>
                         </tr>
                     <?php endwhile; ?>
                 </tbody>

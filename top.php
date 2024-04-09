@@ -95,18 +95,13 @@ if($mypage=='product.php'){
                         <ul class="nav navbar-nav menu_nav ml-auto">
                             <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
                             <li class="nav-item submenu dropdown">
-                                <a href="home.php" class="nav-link dropdown-toggle">My Profile</a>
+                                <a href="home.php" class="nav-link dropdown-toggle">My Ads</a>
                             </li>
                             <li class="nav-item submenu dropdown">
                                 <a href="login.php" class="nav-link dropdown-toggle">Login</a>
                             </li>
                             <li class="nav-item submenu dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
-                                <ul class="dropdown-menu">
-                                    <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="tracking.html">Tracking</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
-                                </ul>
+                                <a href="new_profile.php" class="nav-link dropdown-toggle">My Profile</a>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
                         </ul>
