@@ -2,11 +2,11 @@
 require('top.php');
 
 if (!isset($_SESSION['USER_LOGIN'])) {
-    ?>
+?>
     <script>
         window.location.href = 'index.php';
     </script>
-    <?php
+<?php
     exit;
 }
 
@@ -21,38 +21,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone_number = $con->real_escape_string($_POST['phoneNumber']);
     $address = $con->real_escape_string($_POST['address']);
 
+    // Array to store uploaded image names
     $image_names = array();
 
-    foreach ($_FILES['fileToUpload']['tmp_name'] as $key => $tmp_name) {
-        if (count($_FILES['fileToUpload']['tmp_name']) < 3 || count($_FILES['fileToUpload']['tmp_name']) > 10) {
-            echo "You must upload minimum 3 and maximum 10 images.";
-            exit;
+    // Loop through each uploaded file
+    for ($i = 1; $i <= 5; $i++) {
+        if ($_FILES["fileToUpload$i"]["size"] > 0) {
+            $target_dir = PRODUCT_IMAGE_SERVER_PATH;
+            $target_file = $target_dir . basename($_FILES["fileToUpload$i"]["name"]);
+            $image_name = basename($_FILES["fileToUpload$i"]["name"]);
+
+            // Move uploaded file to target directory
+            move_uploaded_file($_FILES["fileToUpload$i"]["tmp_name"], $target_file);
+            $image_names[] = $image_name;
         }
-
-        if ($_FILES['fileToUpload']['size'][$key] > 1024 * 1024) { 
-            echo "File size must be less than 1 MB.";
-            exit;
-        }
-
-        $target_dir = PRODUCT_IMAGE_SERVER_PATH;
-        $image_name = basename($_FILES["fileToUpload"]["name"][$key]);
-        $target_file = $target_dir . $image_name;
-
-        compressImage($_FILES["fileToUpload"]["tmp_name"][$key], $target_file, 1024);
-
-        $image_names[] = $image_name; 
     }
 
-    $image_path = implode(',', $image_names);
+    // Prepare column names for images
+    $image_columns = implode(", ", array_map(function ($index) {
+        return "image$index";
+    }, range(1, count($image_names))));
 
-    $sql = "INSERT INTO post (user_id, full_name, product_name, price, detail, select_option, phone_number, address, image_path)
-            VALUES ('$user_id', '$full_name', '$product_name', $price, '$detail', '$select_option', '$phone_number', '$address', '$image_path')";
+    // Prepare image values for SQL query
+    $image_values = "'" . implode("', '", $image_names) . "'";
+
+    // Insert into the database
+    $sql = "INSERT INTO post (user_id, full_name, product_name, price, detail, select_option, phone_number, address, $image_columns)
+            VALUES ('$user_id', '$full_name', '$product_name', $price, '$detail', '$select_option', '$phone_number', '$address', $image_values)";
 
     if ($con->query($sql) === TRUE) { ?>
         <script>
             window.location.href = "home.php"
         </script>
-    <?php } else {
+<?php } else {
         echo "Error: " . $sql . "<br>" . $con->error;
     }
 
@@ -111,10 +112,12 @@ $result = $con->query($sql);
             <label for="email">Address:</label>
             <input type="text" class="form-control" maxlength="30" id="address" name="address" placeholder="Enter Address" required>
         </div>
-        <div class="form-group">
-            <label for="fileToUpload">Upload Images:</label>
-            <input type="file" class="form-control-file" id="fileToUpload" name="fileToUpload[]" accept="image/*" multiple required>
-        </div>
+        <?php for ($i = 1; $i <= 5; $i++) { ?>
+            <div class="form-group">
+                <label for="fileToUpload<?= $i ?>">Upload Image <?= $i ?>:</label>
+                <input type="file" class="form-control-file" id="fileToUpload<?= $i ?>" name="fileToUpload<?= $i ?>" accept="image/*">
+            </div>
+        <?php } ?>
         <button type="submit" class="btn btn-warning mt-3 mb-5">Submit</button>
     </form>
 </div>
