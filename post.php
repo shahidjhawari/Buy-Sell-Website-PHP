@@ -175,7 +175,7 @@ $result = $con->query($sql);
                 </div>
             </div>
         <?php } ?>
-        <button type="submit" class="btn btn-warning mt-3 mb-5">Submit</button>
+        <button type="submit" class="primary-btn mt-3 mb-5">Post</button>
     </form>
 </div>
 
