@@ -26,22 +26,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     } else {
 
-    $image_names = array();
+        $image_names = array();
 
-    $uploaded_images_count = 0;
+        $uploaded_images_count = 0;
 
-    for ($i = 1; $i <= 5; $i++) {
-        if ($_FILES["fileToUpload$i"]["size"] > 0) {
-            $target_dir = PRODUCT_IMAGE_SERVER_PATH;
-            $target_file = $target_dir . basename($_FILES["fileToUpload$i"]["name"]);
-            $image_name = basename($_FILES["fileToUpload$i"]["name"]);
+        for ($i = 1; $i <= 5; $i++) {
+            if ($_FILES["fileToUpload$i"]["size"] > 0) {
+                $target_dir = PRODUCT_IMAGE_SERVER_PATH;
+                $target_file = $target_dir . basename($_FILES["fileToUpload$i"]["name"]);
+                $image_name = basename($_FILES["fileToUpload$i"]["name"]);
 
-            if (move_uploaded_file($_FILES["fileToUpload$i"]["tmp_name"], $target_file)) {
-                $image_names[] = $image_name;
-                $uploaded_images_count++;
+                if (move_uploaded_file($_FILES["fileToUpload$i"]["tmp_name"], $target_file)) {
+                    $image_names[] = $image_name;
+                    $uploaded_images_count++;
+                }
             }
         }
-    }
 
 
         $image_columns = implode(", ", array_map(function ($index) {
@@ -73,6 +73,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <style>
     .post-box {
         margin-top: 200px;
+    }
+
+    /* Custom file input style */
+    .custom-file-input {
+        cursor: pointer;
+        position: relative;
+        width: auto;
+        margin-top: .5rem;
+    }
+
+    .custom-file-input:focus~.custom-file-label {
+        border-color: #007bff;
+        box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25);
+    }
+
+    .custom-file-input:lang(en)~.custom-file-label::after {
+        content: "Browse";
+    }
+
+    .custom-file-label {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .custom-file-label::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 3;
+        display: block;
+        padding: .375rem .75rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #e9ecef;
+        border-left: 1px solid #ced4da;
+        border-radius: 0 .375rem .375rem 0;
+    }
+
+    .custom-file-label::after {
+        content: "Browse";
     }
 </style>
 
@@ -121,7 +163,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php for ($i = 1; $i <= 5; $i++) { ?>
             <div class="form-group">
                 <label for="fileToUpload<?= $i ?>">Upload Image <?= $i ?>:</label>
-                <input type="file" class="form-control-file" id="fileToUpload<?= $i ?>" name="fileToUpload<?= $i ?>" accept="image/*">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="fileToUpload<?= $i ?>" name="fileToUpload<?= $i ?>" accept=".png, .jpg, .jpeg">
+                    <label class="custom-file-label" for="fileToUpload<?= $i ?>">Choose file</label>
+                </div>
             </div>
         <?php } ?>
         <button type="submit" class="btn btn-warning mt-3 mb-5">Submit</button>
