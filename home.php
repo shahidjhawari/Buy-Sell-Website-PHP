@@ -45,7 +45,8 @@ $result = $stmt->get_result();
 
 <div class="container card-box">
     <div style='text-align: center;'><a href='post.php' class='btn btn-warning own-btn'><i class='fas fa-plus'></i></a>
-        <p>Add new ad</p>
+        <p>Add new ad</p>        
+        <p>Please delete the post when it is sold out</p>        
     </div>
     <?php if ($result->num_rows > 0) { ?>
         <div class="row">
@@ -66,7 +67,7 @@ $result = $stmt->get_result();
                             <h5 class="card-title"><?php echo $row['product_name']; ?></h5>
                             <p class="card-text"><?php echo $row['phone_number']; ?></p>
                             <p class="card-text"><?php echo "Rs. " . $row['price']; ?></p>
-                            <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-primary mr-2">Edit</a>
+                            <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-info mr-2">Edit</a>
                             <a href="delete.php?id=<?php echo $row['id']; ?>" class="btn btn-danger">Delete</a>
                         </div>
                     </div>
