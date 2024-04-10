@@ -1,7 +1,6 @@
 <?php
 require('top.php');
 
-// Check if user is logged in
 if (!isset($_SESSION['USER_LOGIN'])) {
     header("Location: index.php");
     exit;
@@ -18,7 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone_number = $con->real_escape_string($_POST['phoneNumber']);
     $address = $con->real_escape_string($_POST['address']);
 
-    // Ensure at least 3 images are uploaded
     $uploaded_images_count = 0;
     $image_names = array();
 
@@ -40,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Insert post into database
     $image_columns = implode(", ", array_map(function ($index) {
         return "image$index";
     }, range(1, count($image_names))));
@@ -51,19 +48,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         VALUES ('$user_id', '$full_name', '$product_name', $price, '$detail', '$select_option', '$phone_number', '$address', $image_values)";
 
     if ($con->query($sql) === TRUE) {
-        // Redirect to home page after successful insertion
         header("Location: home.php");
         exit;
     } else {
-        // Handle database error
         echo "Error: " . $sql . "<br>" . $con->error;
     }
 
-    // Set session variable to indicate form submission
     $_SESSION['form_submitted'] = true;
 }
 
-// Retrieve posts by the user
 $sql = "SELECT * FROM post WHERE user_id = '$user_id'";
 $result = $con->query($sql);
 ?>
@@ -116,7 +109,6 @@ $result = $con->query($sql);
 </style>
 
 <script>
-    // Function to update label text when a file is selected
     function updateLabel(input) {
         var label = input.nextElementSibling;
         var fileName = input.files[0].name;
