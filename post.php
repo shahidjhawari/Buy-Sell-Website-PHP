@@ -66,6 +66,12 @@ $result = $con->query($sql);
         margin-top: 200px;
     }
 
+    @media screen and (min-width: 200px) and (max-width: 576px) {
+        .post-box{
+            margin-top: 120px;
+        }
+    }
+
     .custom-file-input {
         cursor: pointer;
         position: relative;

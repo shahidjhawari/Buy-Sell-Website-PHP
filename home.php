@@ -22,17 +22,18 @@ $result = $stmt->get_result();
     }
 
     @media screen and (min-width: 200px) and (max-width: 576px) {
-        .btn {
+        .home-box {
             margin-top: 120px;
         }
     }
 </style>
 
-<div class="container">
+<div class="container home-box">
     <div style='text-align: center;'><a href='post.php' class='btn btn-warning own-btn'><i class='fas fa-plus'></i></a>
         <p>Add new ad</p>
+        <?php if ($result->num_rows > 0) { ?>
+        <span>Please delete the post when it is sold out!</span>
     </div>
-    <?php if ($result->num_rows > 0) { ?>
         <div class="table-responsive">
             <table class="table own-table">
                 <thead>
