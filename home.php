@@ -17,13 +17,24 @@ $result = $stmt->get_result();
 ?>
 
 <style>
+    .card {
+      width: 300px;
+      height: 400px;
+      margin-bottom: 20px;
+    }
+    .card-img-top {
+      width: 100%;
+      height: 50%;
+      object-fit: cover;
+    }
+    .card-body {
+      height: 50%;
+    }
+    .own-btn {
+      margin-top: 20px;
+    }
     .card-box {
         margin-top: 200px;
-        margin-bottom: 100px;
-    }
-
-    .card {
-        margin-top: 20px;
     }
 </style>
 
@@ -41,7 +52,7 @@ $result = $stmt->get_result();
                             if (!empty($row[$image_column])) {
                                 $image_path = PRODUCT_IMAGE_SITE_PATH . $row[$image_column];
                         ?>
-                                <img width="30px" class="card-img-top" src="<?php echo $image_path; ?>" alt="Image">
+                                <img class="card-img-top" src="<?php echo $image_path; ?>" alt="Image">
                         <?php
                             }
                         }
