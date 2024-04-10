@@ -18,26 +18,31 @@ $result = $stmt->get_result();
 
 <style>
     .card {
-      width: 300px;
-      height: 400px;
-      margin-bottom: 20px;
+        width: 300px;
+        height: 400px;
+        margin-bottom: 20px;
     }
+
     .card-img-top {
-      width: 100%;
-      height: 50%;
-      object-fit: contain;
+        width: 100%;
+        height: 50%;
+        object-fit: contain;
     }
+
     .card-body {
-      height: 50%;
+        height: 50%;
     }
+
     .own-btn {
-      margin-top: 20px;
+        margin-top: 20px;
     }
+
     .card-box {
         margin-top: 200px;
     }
+
     @media screen and (min-width: 200px) and (max-width: 576px) {
-        .card-box{
+        .card-box {
             margin-top: 120px;
         }
     }
@@ -45,8 +50,8 @@ $result = $stmt->get_result();
 
 <div class="container card-box">
     <div style='text-align: center;'><a href='post.php' class='btn btn-warning own-btn'><i class='fas fa-plus'></i></a>
-        <p>Add new ad</p>        
-        <p>Please delete the post when it is sold out</p>        
+        <p>Add new ad</p>
+        <p>Please delete the post when it is sold out</p>
     </div>
     <?php if ($result->num_rows > 0) { ?>
         <div class="row">
