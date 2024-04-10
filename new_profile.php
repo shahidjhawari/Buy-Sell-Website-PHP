@@ -30,7 +30,7 @@ if (!isset($_SESSION['USER_LOGIN'])) {
 
 <div class="container profile-container">
     <div class="login-container">
-        <h2 class="text-center mb-4">Welocme <?php echo $_SESSION['USER_NAME']; ?></h2>
+        <h2 class="text-center mb-4">Welcome <?php echo $_SESSION['USER_NAME']; ?></h2>
         <form id="login-form" method="post">
             <div class="form-group">
                 <label for="username">Change Your Name</label>
