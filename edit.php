@@ -52,9 +52,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
+<style>
+    .post-box {
+        margin-top: 200px;
+    }
+    @media screen and (min-width: 200px) and (max-width: 576px) {
+        .post-box {
+            margin-top: 120px;
+        }
+    }
+</style>
+
 <!-- HTML form to edit post details -->
-<div class="container">
-    <h2>Edit Post</h2>
+<div class="container post-box ">
     <form method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="fullName">Your Name:</label>
@@ -95,15 +105,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="address">Address:</label>
             <input type="text" class="form-control" maxlength="30" id="address" name="address" value="<?php echo $post['address']; ?>" placeholder="Enter Address" required>
         </div>
-        <?php for ($i = 1; $i <= 5; $i++) { ?>
-            <div class="form-group">
-                <label for="fileToUpload<?= $i ?>">Upload Image <?= $i ?>:</label>
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="fileToUpload<?= $i ?>" name="fileToUpload<?= $i ?>" accept=".png, .jpg, .jpeg" onchange="updateLabel(this)">
-                    <label class="custom-file-label" for="fileToUpload<?= $i ?>">Choose file</label>
-                </div>
-            </div>
-        <?php } ?>
         <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
         <button type="submit" class="primary-btn mt-3 mb-5">Update Post</button>
     </form>
