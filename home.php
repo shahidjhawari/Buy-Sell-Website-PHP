@@ -59,9 +59,9 @@ $result = $stmt->get_result();
                                 <?php for ($i = 1; $i <= 5; $i++) {
                                     $image_column = "image$i";
                                     if (!empty($row[$image_column])) {
-                                        $image_path = PRODUCT_IMAGE_SERVER_PATH . $row[$image_column];
+                                        $image_path = PRODUCT_IMAGE_SITE_PATH . $row[$image_column];
                                 ?>
-                                        <img src="<?php echo $image_path; ?>" alt="Image">
+                                        <img width="30px" src="<?php echo $image_path; ?>" alt="Image">
                                 <?php
                                     }
                                 }
