@@ -26,7 +26,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     exit;
 }
 
-// Handle form submission to update post details
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $full_name = $con->real_escape_string($_POST['fullName']);
     $product_name = $con->real_escape_string($_POST['productName']);
@@ -35,9 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $select_option = $con->real_escape_string($_POST['select1']);
     $phone_number = $con->real_escape_string($_POST['phoneNumber']);
     $address = $con->real_escape_string($_POST['address']);
-    $post_id = $_POST['post_id']; // assuming you have post_id value in your form
+    $post_id = $_POST['post_id'];
 
-    // Update the post in the database
     $sql = "UPDATE post SET full_name=?, product_name=?, price=?, detail=?, select_option=?, phone_number=?, address=? WHERE id=?";
     $stmt = $con->prepare($sql);
     $stmt->bind_param('sssssssi', $full_name, $product_name, $price, $detail, $select_option, $phone_number, $address, $post_id);
@@ -63,7 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 </style>
 
-<!-- HTML form to edit post details -->
 <div class="container post-box ">
     <form method="post" enctype="multipart/form-data">
         <div class="form-group">
