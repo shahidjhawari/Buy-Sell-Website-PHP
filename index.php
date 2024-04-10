@@ -1,54 +1,34 @@
 <?php require('top.php'); ?>
 
 <style>
-    .category-box {
-      height: 30px;
-      width: 60px;
-	  margin: 10px;
-      border: 1px solid #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-	  padding: 20px 60px;
-    }
+	.category-box {
+		height: 30px;
+		width: 60px;
+		margin: 10px;
+		border: 1px solid #ccc;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 20px 60px;
+	}
+
 	.categories-box {
 		margin-top: 200px;
 	}
-  </style>
+</style>
 
 <div class="container categories-box">
-  <div class="row">
-    <div class="col-md-3 col-sm-4 col-6">
-	  <a class="category-box btn btn-warning" href="#">Animal</a>
-    </div>
-    <div class="col-md-3 col-sm-4 col-6">
-      <div class="category-box">Category 2</div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-6">
-      <div class="category-box">Category 3</div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-6">
-      <div class="category-box">Category 4</div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-6">
-      <div class="category-box">Category 5</div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-6">
-      <div class="category-box">Category 6</div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-6">
-      <div class="category-box">Category 7</div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-6">
-      <div class="category-box">Category 8</div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-6">
-      <div class="category-box">Category 9</div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-6">
-      <div class="category-box">Category 10</div>
-    </div>
-  </div>
+	<div class="row">
+		<?php
+		foreach ($cat_arr as $list) {
+		?>
+			<div class="col-md-3 col-sm-4 col-6">
+				<a class="category-box btn btn-light" href="categories.php?id=<?php echo $list['id']?>"><?php echo $list['categories']?></a>
+			</div>
+		<?php
+		}
+		?>
+	</div>
 </div>
 
 <!-- start product Area -->
