@@ -69,9 +69,9 @@ $result = $stmt->get_result();
                         }
                         ?>
                         <div class="card-body">
-                            <h5 class="card-title"><?php echo $row['product_name']; ?></h5>
-                            <p class="card-text"><?php echo $row['phone_number']; ?></p>
-                            <p class="card-text"><?php echo "Rs. " . $row['price']; ?></p>
+                            <h5 class="card-title">Name : <?php echo $row['product_name']; ?></h5>
+                            <p class="card-text">Contact : <?php echo $row['phone_number']; ?></p>
+                            <p class="card-text">Price : <?php echo "Rs. " . $row['price']; ?></p>
                             <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-info mr-2">Edit</a>
                             <a href="delete.php?id=<?php echo $row['id']; ?>" class="btn btn-danger">Delete</a>
                         </div>
