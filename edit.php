@@ -28,29 +28,27 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 // Handle form submission to update post details
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve and sanitize form data
-    $fullName = $_POST['fullName'];
-    $productName = $_POST['productName'];
-    $price = $_POST['price'];
-    $detail = $_POST['detail'];
-    $category_id = $_POST['select1'];
-    $phoneNumber = $_POST['phoneNumber'];
-    $address = $_POST['address'];
+    $full_name = $con->real_escape_string($_POST['fullName']);
+    $product_name = $con->real_escape_string($_POST['productName']);
+    $price = $con->real_escape_string($_POST['price']);
+    $detail = $con->real_escape_string($_POST['detail']);
+    $select_option = $con->real_escape_string($_POST['select1']);
+    $phone_number = $con->real_escape_string($_POST['phoneNumber']);
+    $address = $con->real_escape_string($_POST['address']);
+    $post_id = $_POST['post_id']; // assuming you have post_id value in your form
 
     // Update the post in the database
-    $sql = "UPDATE post SET full_name=?, product_name=?, price=?, detail=?, phone_number=?, address=? WHERE id=?";
+    $sql = "UPDATE post SET full_name=?, product_name=?, price=?, detail=?, select_option=?, phone_number=?, address=? WHERE id=?";
     $stmt = $con->prepare($sql);
-    $stmt->bind_param('sssssss', $fullName, $productName, $price, $detail, $phoneNumber, $address, $post_id); // Changed 'ssssssss' to 'sssssss'
-    if ($stmt->execute()) {
-        echo "Post updated successfully!";
-        // Redirect to the view post page or show a success message
-        exit;
-    } else {
+    $stmt->bind_param('sssssssi', $full_name, $product_name, $price, $detail, $select_option, $phone_number, $address, $post_id);
+    if ($stmt->execute()) { ?>
+        <script>
+            window.location.href = "home.php";
+        </script>
+    <?php } else {
         echo "Error updating post: " . $stmt->error;
     }
 }
-
-
 
 ?>
 
@@ -106,6 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
         <?php } ?>
+        <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
         <button type="submit" class="primary-btn mt-3 mb-5">Update Post</button>
     </form>
 </div>
