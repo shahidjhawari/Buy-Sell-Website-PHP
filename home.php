@@ -56,7 +56,7 @@ $result = $stmt->get_result();
                             <td><a href="edit.php?id=<?php echo $row['id']; ?>"><i class='fas fa-edit fa-1x' style="color: #191919;"></i></a></td>
                             <td><a href="delete.php?id=<?php echo $row['id']; ?>"><i class='fas fa-trash fa-1x' style="color: #9A031E;"></i></a></td>
                             <td>
-                                <?php for ($i = 1; $i <= 5; $i++) {
+                                <?php for ($i = 1; $i <= 1; $i++) {
                                     $image_column = "image$i";
                                     if (!empty($row[$image_column])) {
                                         $image_path = PRODUCT_IMAGE_SITE_PATH . $row[$image_column];
@@ -70,7 +70,6 @@ $result = $stmt->get_result();
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
-
             </table>
         </div>
     <?php } ?>
