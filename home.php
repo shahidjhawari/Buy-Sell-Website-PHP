@@ -36,6 +36,11 @@ $result = $stmt->get_result();
     .card-box {
         margin-top: 200px;
     }
+    @media screen and (min-width: 200px) and (max-width: 576px) {
+        .card-box{
+            margin-top: 120px;
+        }
+    }
 </style>
 
 <div class="container card-box">
