@@ -25,7 +25,7 @@ $result = $stmt->get_result();
     .card-img-top {
       width: 100%;
       height: 50%;
-      object-fit: cover;
+      object-fit: contain;
     }
     .card-body {
       height: 50%;
